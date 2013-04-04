@@ -5,6 +5,7 @@
 package horariosadhoc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -16,12 +17,42 @@ class Solucion {
 
     static Random r = new Random();
 
-    private static Solucion copiar(Solucion s) {
+    public static Solucion copiar(Solucion s) {
         Solucion respuesta = new Solucion();
 
         respuesta.s = copiar(s.s);
 
         return respuesta;
+    }
+
+    static int evaluar(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
+        int evaluacion = 0;
+
+        Fragmento[] f = s.s;
+
+        int l = f.length;
+
+        for (int a = 0; a < l; a++) {
+            int tiempo_estudio = 0;
+            for (int b = a+1; b < l; b++) {
+                tiempo_estudio += tiempos[b-1];
+                //Si los dos espacios tienen asignatura
+                Asignatura a1 = f[a].contenido;
+                Asignatura a2 = f[b].contenido;
+                if (a1 != null && a2 != null) {
+                    //Si hay afectados entonces sumamos algo, sino nada
+                    Integer nafectados = afectados.get(new ParAsig(a1, a2));
+                    if (nafectados != null) {
+                        //Sumamos a la evaluación para cada par de asignaturas de la solución
+                        //la multiplicación del tiempo de estudio por el número de afectados
+                        //de forma que cuanto más tiempo a más afectados mejor
+                        evaluacion += tiempo_estudio * nafectados;
+                    }
+                }
+            }
+        }
+        return evaluacion;
+
     }
     //Fragmentos de 12 horas
     Fragmento[] s;
@@ -40,7 +71,7 @@ class Solucion {
     static public Fragmento[] nuevoFragmento(int espacios) {
         Fragmento[] f = new Fragmento[espacios];
 
-        for (int i=0; i<espacios; i++) {
+        for (int i = 0; i < espacios; i++) {
             f[i] = new Fragmento();
         }
 
@@ -60,25 +91,28 @@ class Solucion {
 
     static public Solucion Aleatoria(ArrayList<Asignatura> asignaturas, Fragmento[] fragmentos) {
 
+        Fragmento[] f = copiar(fragmentos);
+        
+        
         Solucion respuesta = null;
         //Comprobar si es posible
-        if (asignaturas.size() <= fragmentos.length) { //No estamos teniendo en cuenta los espacios prohibidos
+        if (asignaturas.size() <= f.length) { //No estamos teniendo en cuenta los espacios prohibidos
 
             for (int i = 0; i < asignaturas.size(); i++) {
                 //Obtener índice 
-                int indice = r.nextInt(fragmentos.length);
+                int indice = r.nextInt(f.length);
                 //Asegurar que la posición está vacía
-                while (fragmentos[indice].prohibido || fragmentos[indice].contenido != null) {
-                    indice = r.nextInt(fragmentos.length);
+                while (f[indice].prohibido || f[indice].contenido != null) {
+                    indice = r.nextInt(f.length);
                 }
                 //Escribir la asignatura en el índice
-                fragmentos[indice].contenido = asignaturas.get(i);
+                f[indice].contenido = asignaturas.get(i);
             }
 
             respuesta = new Solucion();
-            respuesta.s = fragmentos;
+            respuesta.s = f;
 
-        }else{
+        } else {
             System.err.println("No existe solución. Demasiadas asignaturas.");
         }
         return respuesta;

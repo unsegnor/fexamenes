@@ -80,14 +80,14 @@ public class Utiles {
             for (Asignatura a : m.asignaturas) {
                 //Comprobamos si existe un hijo del nodo actual que la contenga
                 int indice = -1;
-                
-                for (int i=0; indice == -1 && i<actual.hijos.size(); i++){
-                    
-                    if(((Nodo)(actual.hijos.get(i))).objeto == a){
+
+                for (int i = 0; indice == -1 && i < actual.hijos.size(); i++) {
+
+                    if (((Nodo) (actual.hijos.get(i))).objeto == a) {
                         indice = i;
                     }
                 }
-                
+
                 if (indice == -1) {
                     //No existe el hijo -> lo creamos
                     Nodo hijo = new Nodo();
@@ -130,16 +130,15 @@ public class Utiles {
         //Devolvemos el grafo
         return fg;
     }
-    
-    
-    public static String imprimir(FrequenceGraph fg){
+
+    public static String imprimir(FrequenceGraph fg) {
         return imprimir_arbol(fg.padre);
     }
-    
-    public static String imprimir_arbol(Nodo padre){
+
+    public static String imprimir_arbol(Nodo padre) {
         return imprimir_arbol(padre, " ", true);
     }
-    
+
     public static String imprimir_arbol(Nodo padre, String historia, boolean ultimo) {
         StringBuilder sb = new StringBuilder();
 
@@ -189,56 +188,89 @@ public class Utiles {
     }
 
     static HashMap<ParAsig, Integer> dositemsets(FrequenceGraph fg) {
-        
+
         HashMap<ParAsig, Integer> respuesta = new HashMap<ParAsig, Integer>();
-        
+
         //Recorrer todos los elementos de la lista de menor a mayor anotando los kitemsets
-        for(int i=fg.registros.size()-1; i>=0; i--){
+        for (int i = fg.registros.size() - 1; i >= 0; i--) {
             //Para cada registro
             Registro<Asignatura> reg = fg.registros.get(i);
-            
+
             //Anotaremos los grupos que genera
-            ArrayList<ArrayList<Asignatura> > grupos = new ArrayList<ArrayList<Asignatura> >();
-            
+            ArrayList<ArrayList<Asignatura>> grupos = new ArrayList<ArrayList<Asignatura>>();
+
             //Recorrer los nodos de la lista del registro
             Nodo actual = reg.primero;
-            while(actual != null){
+            while (actual != null) {
                 //Tratar el nodo
-                    //Anotamos su frecuencia
-                    Asignatura actAsig = (Asignatura) actual.objeto;
-                    int frecuencia = actual.contador;
-                    //Trepamos hasta el padre
-                    //Vamos construyendo los grupos que van a sumar la frecuencia de la hoja
-                    Nodo actual_trepa = actual.padre;
-                    while(actual_trepa != null && actual_trepa.objeto != null){ //Hasta que lleguemos al nodo padre (cuyo objeto es "null")
-                        //Tratar el padre //TODO De momento lo hacemos para k = 2 sólo, GENERALIZAR
-                        //TODO para GENERALIZAR habrá que ir anotando grupos de tamaño k según vayamos trepando por el árbol
-                        ParAsig pa = new ParAsig();
-                        pa.a = actAsig;
-                        pa.b = (Asignatura) actual_trepa.objeto;
-                        
-                        //Añadimos la pareja al hashmap o aumentamos su frecuencia
-                        Integer f_actual = respuesta.get(pa);
-                        if(f_actual ==null){
-                            f_actual = 0;
-                            //Si no existía la creamos
-                            //respuesta.put(pa, f_actual);
-                        }
-                        
-                        //Aumentamos la frecuencia
-                        f_actual+=frecuencia;
-                        respuesta.put(pa, f_actual);
-                        
-                        //Actualizar el padre
-                        actual_trepa = actual_trepa.padre;
+                //Anotamos su frecuencia
+                Asignatura actAsig = (Asignatura) actual.objeto;
+                int frecuencia = actual.contador;
+                //Trepamos hasta el padre
+                //Vamos construyendo los grupos que van a sumar la frecuencia de la hoja
+                Nodo actual_trepa = actual.padre;
+                while (actual_trepa != null && actual_trepa.objeto != null) { //Hasta que lleguemos al nodo padre (cuyo objeto es "null")
+                    //Tratar el padre //TODO De momento lo hacemos para k = 2 sólo, GENERALIZAR
+                    //TODO para GENERALIZAR habrá que ir anotando grupos de tamaño k según vayamos trepando por el árbol
+                    ParAsig pa = new ParAsig();
+                    pa.a = actAsig;
+                    pa.b = (Asignatura) actual_trepa.objeto;
+
+                    //Añadimos la pareja al hashmap o aumentamos su frecuencia
+                    Integer f_actual = respuesta.get(pa);
+                    if (f_actual == null) {
+                        f_actual = 0;
+                        //Si no existía la creamos
+                        //respuesta.put(pa, f_actual);
                     }
+
+                    //Aumentamos la frecuencia
+                    f_actual += frecuencia;
+                    respuesta.put(pa, f_actual);
+
+                    //Actualizar el padre
+                    actual_trepa = actual_trepa.padre;
+                }
                 //Siguiente nodo
                 actual = actual.siguiente;
             }
-            
+
         }
-        
-        
+
+
         return respuesta;
+    }
+
+    static public Solucion BL(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
+        Solucion mejor = Solucion.copiar(s);
+        int mejor_eval = Solucion.evaluar(s, afectados, tiempos);
+        boolean parar = false;
+
+        while (!parar) {
+
+            //Obtener el vecindario
+            Solucion[] vecinos = Solucion.vecinos(mejor);
+
+            //Evaluar el vecindario y quedarnos con la mejor
+            int max_eval = 0;
+            Solucion max_v = null;
+            for (Solucion v : vecinos) {
+                int evaluacion = Solucion.evaluar(v, afectados, tiempos);
+                if (evaluacion > max_eval) {
+                    max_eval = evaluacion;
+                    max_v = v;
+                }
+            }
+            //Después de mirar todos los vecinos paramos si ninguno ha superado al mejor total
+            if(max_eval > mejor_eval){
+                //Sustituimos al mejor
+                mejor = max_v;
+                mejor_eval = max_eval;
+            }else{
+                parar = true;
+            }
+        }
+
+        return mejor;
     }
 }

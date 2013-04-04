@@ -15,6 +15,14 @@ public class ParAsig {
     Asignatura b;
 
     
+    
+    public ParAsig(){}
+    
+    public ParAsig(Asignatura a, Asignatura b){
+        this.a = a;
+        this.b = b;
+    }
+    
     @Override
    public int hashCode(){
        int numa = a.ID.hashCode();
