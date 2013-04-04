@@ -243,7 +243,7 @@ public class Utiles {
 
     static public Solucion BL(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
         Solucion mejor = Solucion.copiar(s);
-        int mejor_eval = Solucion.evaluar(s, afectados, tiempos);
+        double mejor_eval = Solucion.evaluar(s, afectados, tiempos);
         boolean parar = false;
 
         while (!parar) {
@@ -252,10 +252,10 @@ public class Utiles {
             Solucion[] vecinos = Solucion.vecinos(mejor);
 
             //Evaluar el vecindario y quedarnos con la mejor
-            int max_eval = 0;
+            double max_eval = 0;
             Solucion max_v = null;
             for (Solucion v : vecinos) {
-                int evaluacion = Solucion.evaluar(v, afectados, tiempos);
+                double evaluacion = Solucion.evaluar(v, afectados, tiempos);
                 if (evaluacion > max_eval) {
                     max_eval = evaluacion;
                     max_v = v;

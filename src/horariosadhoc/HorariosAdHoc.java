@@ -69,7 +69,7 @@ public class HorariosAdHoc {
          }*/
 
         //Aquí ya tenemos las restricciones del problema ponderadas por número de personas a las que afecta
-        int ndias = 3;
+        int ndias = 4;
         int nfragmentos = ndias * 2;
 
         //Creamos los fragmentos iniciales
@@ -84,8 +84,10 @@ public class HorariosAdHoc {
         //Solucion s = Solucion.Aleatoria(asignaturas, fragmentos);
 
         //Definimos los tiempos que separan los fragmentos
-        int[] tiempos = new int[nfragmentos - 1];
-        Arrays.fill(tiempos, 1);
+        //int[] tiempos = new int[nfragmentos - 1];
+        //Arrays.fill(tiempos, 1);
+        
+        int[] tiempos = {0,1,0,1,0,1,0};
 /*
         int evaluacion = Solucion.evaluar(s, dositemsets, tiempos);
 
@@ -104,7 +106,7 @@ public class HorariosAdHoc {
         int N = 1000;
         Solucion mejor = Solucion.Aleatoria(asignaturas, fragmentos);
         mejor = Utiles.BL(mejor, dositemsets, tiempos);
-        int mejor_eval = Solucion.evaluar(mejor, dositemsets, tiempos);
+        double mejor_eval = Solucion.evaluar(mejor, dositemsets, tiempos);
         
         System.out.println(mejor_eval + "\t" + mejor);
         
@@ -114,9 +116,9 @@ public class HorariosAdHoc {
             
             //Búsqueda local
             Solucion sBL = Utiles.BL(solucion, dositemsets, tiempos);
-            int seval = Solucion.evaluar(sBL, dositemsets, tiempos);
+            double seval = Solucion.evaluar(sBL, dositemsets, tiempos);
 
-            System.out.println(solucion + " -> " + sBL);
+            //System.out.println(solucion + " -> " + sBL);
             
             if(seval > mejor_eval){
                 mejor_eval = seval;

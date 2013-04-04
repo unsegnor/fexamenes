@@ -25,16 +25,17 @@ class Solucion {
         return respuesta;
     }
 
-    static int evaluar(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
-        int evaluacion = 0;
-
+    static double evaluar(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
+        double evaluacion = 0;
+        boolean valido = true;
+        
         Fragmento[] f = s.s;
 
         int l = f.length;
 
-        for (int a = 0; a < l; a++) {
+        for (int a = 0; valido && a < l; a++) {
             int tiempo_estudio = 0;
-            for (int b = a+1; b < l; b++) {
+            for (int b = a+1; valido && b < l; b++) {
                 tiempo_estudio += tiempos[b-1];
                 //Si los dos espacios tienen asignatura
                 Asignatura a1 = f[a].contenido;
@@ -46,10 +47,20 @@ class Solucion {
                         //Sumamos a la evaluación para cada par de asignaturas de la solución
                         //la multiplicación del tiempo de estudio por el número de afectados
                         //de forma que cuanto más tiempo a más afectados mejor
-                        evaluacion += tiempo_estudio * nafectados;
+                        evaluacion += Math.log(tiempo_estudio) * nafectados;
+                        
+                        //No se permiten tiempos iguales a 0
+                        if(tiempo_estudio==0){
+                            valido = false;
+                        }
                     }
                 }
             }
+        }
+        
+        //Si no es válido entonces evaluación = 0;
+        if(!valido){
+            evaluacion = 0;
         }
         return evaluacion;
 
