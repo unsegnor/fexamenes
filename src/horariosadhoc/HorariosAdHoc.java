@@ -39,7 +39,15 @@ public class HorariosAdHoc {
         for (Entry<ParAsig, Integer> e : dositemsets.entrySet()) {
             System.out.println(e.getKey().a + "\t" + e.getKey().b + "\t->\t" + e.getValue());
         }
+        
+        //Guardar los itemsets con sus frecuencias en un archivo
+        StringBuilder sb = new StringBuilder();
+        for (Entry<ParAsig, Integer> e : dositemsets.entrySet()) {
+            sb.append(e.getKey().a.ID).append(",").append(e.getKey().b.ID).append(",").append(e.getValue().toString()).append("\n");
+        }
 
+        Utiles.guardarArchivo("frecuencias2.txt", sb.toString());
+        
         //Componer sistema para consultas, transformar en restricciones con peso
         ArrayList<Restriccion> array_restricciones = new ArrayList<Restriccion>();
         for (Entry<ParAsig, Integer> e : dositemsets.entrySet()) {
@@ -69,11 +77,13 @@ public class HorariosAdHoc {
          }*/
 
         //Aquí ya tenemos las restricciones del problema ponderadas por número de personas a las que afecta
-        int ndias = 4;
-        int nfragmentos = ndias * 2;
+        
+        
+        
+        
+        
+        int ndias = 28;
 
-        //Creamos los fragmentos iniciales
-        Fragmento[] fragmentos = Solucion.nuevoFragmento(nfragmentos);
 
         //Lo modificamos como queramos, por ejemplo, cada 7 añadimos 2 prohibidos
 
@@ -87,8 +97,26 @@ public class HorariosAdHoc {
         //int[] tiempos = new int[nfragmentos - 1];
         //Arrays.fill(tiempos, 1);
         
-        int[] tiempos = {0,1,0,1,0,1,0};
-/*
+        /*
+         *         int[] tiempos = {
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
+            ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
+            ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
+            ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
+        };
+         */
+        
+        int[] tiempos = {
+            0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,65
+            ,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,65
+            ,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,65
+            ,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,65};
+
+                int nfragmentos = tiempos.length;
+
+        //Creamos los fragmentos iniciales
+        Fragmento[] fragmentos = Solucion.nuevoFragmento(nfragmentos);
+        /*
         int evaluacion = Solucion.evaluar(s, dositemsets, tiempos);
 
         System.out.println(s);
@@ -105,7 +133,7 @@ public class HorariosAdHoc {
         //Realizar N búsquedas locales y quedarnos con la mejor
         int N = 1000;
         Solucion mejor = Solucion.Aleatoria(asignaturas, fragmentos);
-        mejor = Utiles.BL(mejor, dositemsets, tiempos);
+        mejor = Utiles.BLprimerMejor(mejor, dositemsets, tiempos);
         double mejor_eval = Solucion.evaluar(mejor, dositemsets, tiempos);
         
         System.out.println(mejor_eval + "\t" + mejor);
@@ -115,7 +143,7 @@ public class HorariosAdHoc {
             Solucion solucion = Solucion.Aleatoria(asignaturas, fragmentos);
             
             //Búsqueda local
-            Solucion sBL = Utiles.BL(solucion, dositemsets, tiempos);
+            Solucion sBL = Utiles.BLprimerMejor(solucion, dositemsets, tiempos);
             double seval = Solucion.evaluar(sBL, dositemsets, tiempos);
 
             //System.out.println(solucion + " -> " + sBL);
@@ -127,7 +155,7 @@ public class HorariosAdHoc {
             }
 
             //System.out.println(mejor_eval);
-            //System.out.println(seval + "\t" + sBL);
+            System.out.println(seval + "\t" + sBL);
         }
 
         

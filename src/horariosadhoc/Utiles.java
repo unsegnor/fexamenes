@@ -4,16 +4,47 @@
  */
 package horariosadhoc;
 
+import static horariosadhoc.Solucion.intercambiar;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Victor
  */
 public class Utiles {
+
+    /*
+     * Guardar archivo con el nombre "nombre" y contenido "contenido"
+     */
+    public static void guardarArchivo(String nombre, String contenido) {
+        BufferedWriter bw = null;
+        try {
+            File archivo = new File(nombre);
+            bw = new BufferedWriter(new FileWriter(archivo));
+
+            bw.write(contenido);
+
+            System.out.println("Generado " + nombre);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Utiles.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bw.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Utiles.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
     public static FrequenceGraph montarFG(DatosMatriculas dm) {
 
@@ -243,7 +274,7 @@ public class Utiles {
 
     static public Solucion BL(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
         Solucion mejor = Solucion.copiar(s);
-        double mejor_eval = Solucion.evaluar(s, afectados, tiempos);
+        double mejor_eval = Solucion.evaluar(mejor, afectados, tiempos);
         boolean parar = false;
 
         while (!parar) {
@@ -252,8 +283,8 @@ public class Utiles {
             Solucion[] vecinos = Solucion.vecinos(mejor);
 
             //Evaluar el vecindario y quedarnos con la mejor
-            double max_eval = 0;
-            Solucion max_v = null;
+            double max_eval = -1;
+            Solucion max_v = mejor;
             for (Solucion v : vecinos) {
                 double evaluacion = Solucion.evaluar(v, afectados, tiempos);
                 if (evaluacion > max_eval) {
@@ -262,11 +293,59 @@ public class Utiles {
                 }
             }
             //Después de mirar todos los vecinos paramos si ninguno ha superado al mejor total
-            if(max_eval > mejor_eval){
+            if (max_eval > mejor_eval) {
                 //Sustituimos al mejor
                 mejor = max_v;
                 mejor_eval = max_eval;
-            }else{
+                System.out.println(max_eval + "\t" + mejor);
+            } else {
+                parar = true;
+            }
+        }
+
+        return mejor;
+    }
+
+    static public Solucion BLprimerMejor(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
+        Solucion mejor = Solucion.copiar(s);
+        double mejor_eval = Solucion.evaluar(mejor, afectados, tiempos);
+        boolean parar = false;
+
+        while (!parar) {
+
+            //Obtener el vecindario //TODO esta función se come mucha memoria, mejor calcularlos y evaluarlos uno a uno
+            //Solucion[] vecinos = Solucion.vecinos(mejor);
+
+            double max_eval = -1;
+
+            int l = mejor.s.length;
+            
+            boolean reiniciar = false;
+            for (int a = 0; a < l && !reiniciar; a++) {
+                for (int b = a + 1; b < l && !reiniciar; b++) {
+                    //Intercambiar
+                    Solucion vecino = intercambiar(mejor, a, b);
+                    //Si hay respuesta comprobamos si es mejor que la actual
+                    if (vecino != null) {
+                        //Si es mejor que la mejor pasa a ser la mejor y repetimos
+
+                        //Evaluar
+                        double evaluacion = Solucion.evaluar(vecino, afectados, tiempos);
+                        //Si la evaluación es mejor pasa a ser la mejor solución
+                        if (evaluacion > mejor_eval) {
+                            mejor_eval = evaluacion;
+                            mejor = vecino;
+                            //Hemos terminado con esta posición, volvemos a empezar
+                            reiniciar = true;
+                        }
+                    }
+                }
+            }
+            
+            //Si llegamos aquí y reiniciar es false es que hemos comprobado todos los vecinos y ninguno es mejor
+            //hemos terminado
+            
+            if(!reiniciar){
                 parar = true;
             }
         }

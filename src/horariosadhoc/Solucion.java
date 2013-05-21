@@ -4,7 +4,9 @@
  */
 package horariosadhoc;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -25,18 +27,35 @@ class Solucion {
         return respuesta;
     }
 
+    
+    /**
+     * Esta función devuelve el valor de evaluación total y el de cada par de asignaturas que componen la solución.
+     * También recibe los pares para consultarlos por si no han cambiado. Los que han cambiado se vuelven a calcular.
+     * @param pares_calculados
+     * @param s
+     * @param afectados
+     * @param tiempos
+     * @return 
+     */
+    static double evaluar(ParAsig cambiado, HashMap<ParAsig,Double> pares_calculados, Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos){
+        
+        
+    return 2;
+    }
+    
+    
     static double evaluar(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
         double evaluacion = 0;
         boolean valido = true;
-        
+
         Fragmento[] f = s.s;
 
         int l = f.length;
 
         for (int a = 0; valido && a < l; a++) {
             int tiempo_estudio = 0;
-            for (int b = a+1; valido && b < l; b++) {
-                tiempo_estudio += tiempos[b-1];
+            for (int b = a + 1; valido && b < l; b++) {
+                tiempo_estudio += tiempos[b - 1];
                 //Si los dos espacios tienen asignatura
                 Asignatura a1 = f[a].contenido;
                 Asignatura a2 = f[b].contenido;
@@ -47,19 +66,21 @@ class Solucion {
                         //Sumamos a la evaluación para cada par de asignaturas de la solución
                         //la multiplicación del tiempo de estudio por el número de afectados
                         //de forma que cuanto más tiempo a más afectados mejor
-                        evaluacion += Math.log(tiempo_estudio) * nafectados;
-                        
-                        //No se permiten tiempos iguales a 0
-                        if(tiempo_estudio==0){
-                            valido = false;
+                        if (tiempo_estudio > 0) {
+                            evaluacion += Math.log(tiempo_estudio) * nafectados;
                         }
+
+                        //No se permiten tiempos iguales a 0
+                        /*if(tiempo_estudio==0){
+                         valido = false;
+                         }*/
                     }
                 }
             }
         }
-        
+
         //Si no es válido entonces evaluación = 0;
-        if(!valido){
+        if (!valido) {
             evaluacion = 0;
         }
         return evaluacion;
@@ -103,8 +124,8 @@ class Solucion {
     static public Solucion Aleatoria(ArrayList<Asignatura> asignaturas, Fragmento[] fragmentos) {
 
         Fragmento[] f = copiar(fragmentos);
-        
-        
+
+
         Solucion respuesta = null;
         //Comprobar si es posible
         if (asignaturas.size() <= f.length) { //No estamos teniendo en cuenta los espacios prohibidos
@@ -133,8 +154,6 @@ class Solucion {
         ArrayList<Solucion> soluciones = new ArrayList<Solucion>();
 
         int l = s.s.length;
-
-
 
         for (int a = 0; a < l; a++) {
             for (int b = a + 1; b < l; b++) {
