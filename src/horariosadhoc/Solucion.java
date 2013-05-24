@@ -44,6 +44,61 @@ class Solucion {
     }
     
     
+    static Evaluacion evaluarComp(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
+        
+        Evaluacion eval = new Evaluacion();
+        
+        double puntos = 0;
+        int colisiones = 0;
+        boolean valido = true;
+
+        Fragmento[] f = s.s;
+
+        int l = f.length;
+
+        for (int a = 0; valido && a < l; a++) {
+            int tiempo_estudio = 0;
+            for (int b = a + 1; valido && b < l; b++) {
+                tiempo_estudio += tiempos[b - 1];
+                //Si los dos espacios tienen asignatura
+                Asignatura a1 = f[a].contenido;
+                Asignatura a2 = f[b].contenido;
+                if (a1 != null && a2 != null) {
+                    //Si hay afectados entonces sumamos algo, sino nada
+                    Integer nafectados = afectados.get(new ParAsig(a1, a2));
+                    if (nafectados != null) {
+                        //Sumamos a la evaluación para cada par de asignaturas de la solución
+                        //la multiplicación del tiempo de estudio por el número de afectados
+                        //de forma que cuanto más tiempo a más afectados mejor
+                        if (tiempo_estudio > 0) {
+                            puntos += Math.log(tiempo_estudio) * nafectados;
+                        }
+
+                        //No se permiten tiempos iguales a 0
+                        /*if(tiempo_estudio==0){
+                         valido = false;
+                         }*/
+                        if(tiempo_estudio==0){
+                            colisiones+=nafectados;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Si no es válido entonces evaluación = 0;
+        if (!valido) {
+            puntos = 0;
+        }
+        
+        //Rellenamos la evaluación
+        eval.puntos= puntos;
+        eval.colisiones = colisiones;
+        
+        return eval;
+
+    }
+    
     static double evaluar(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
         double evaluacion = 0;
         boolean valido = true;

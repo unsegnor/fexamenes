@@ -308,7 +308,7 @@ public class Utiles {
 
     static public Solucion BLprimerMejor(Solucion s, HashMap<ParAsig, Integer> afectados, int[] tiempos) {
         Solucion mejor = Solucion.copiar(s);
-        double mejor_eval = Solucion.evaluar(mejor, afectados, tiempos);
+        Evaluacion mejor_eval = Solucion.evaluarComp(mejor, afectados, tiempos);
         boolean parar = false;
 
         while (!parar) {
@@ -316,7 +316,7 @@ public class Utiles {
             //Obtener el vecindario //TODO esta función se come mucha memoria, mejor calcularlos y evaluarlos uno a uno
             //Solucion[] vecinos = Solucion.vecinos(mejor);
 
-            double max_eval = -1;
+            double max_eval = Double.MIN_VALUE;
 
             int l = mejor.s.length;
             
@@ -330,12 +330,14 @@ public class Utiles {
                         //Si es mejor que la mejor pasa a ser la mejor y repetimos
 
                         //Evaluar
-                        double evaluacion = Solucion.evaluar(vecino, afectados, tiempos);
+                        Evaluacion eval = Solucion.evaluarComp(vecino, afectados, tiempos);
                         //Si la evaluación es mejor pasa a ser la mejor solución
-                        if (evaluacion > mejor_eval) {
-                            mejor_eval = evaluacion;
+                        if (eval.total() > mejor_eval.total()) {
+                            mejor_eval = eval;
                             mejor = vecino;
                             //Hemos terminado con esta posición, volvemos a empezar
+                            
+                            System.out.println(mejor_eval.colisiones + "\t"+ mejor_eval.puntos + "\t" + mejor);
                             reiniciar = true;
                         }
                     }
