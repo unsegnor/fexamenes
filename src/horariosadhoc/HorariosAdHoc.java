@@ -39,7 +39,7 @@ public class HorariosAdHoc {
         for (Entry<ParAsig, Integer> e : dositemsets.entrySet()) {
             System.out.println(e.getKey().a + "\t" + e.getKey().b + "\t->\t" + e.getValue());
         }
-        
+
         //Guardar los itemsets con sus frecuencias en un archivo
         StringBuilder sb = new StringBuilder();
         for (Entry<ParAsig, Integer> e : dositemsets.entrySet()) {
@@ -47,7 +47,7 @@ public class HorariosAdHoc {
         }
 
         Utiles.guardarArchivo("frecuencias2.txt", sb.toString());
-        
+
         //Componer sistema para consultas, transformar en restricciones con peso
         ArrayList<Restriccion> array_restricciones = new ArrayList<Restriccion>();
         for (Entry<ParAsig, Integer> e : dositemsets.entrySet()) {
@@ -77,11 +77,11 @@ public class HorariosAdHoc {
          }*/
 
         //Aquí ya tenemos las restricciones del problema ponderadas por número de personas a las que afecta
-        
-        
-        
-        
-        
+
+
+
+
+
         int ndias = 28;
 
 
@@ -96,69 +96,83 @@ public class HorariosAdHoc {
         //Definimos los tiempos que separan los fragmentos
         //int[] tiempos = new int[nfragmentos - 1];
         //Arrays.fill(tiempos, 1);
-        
+
         /*
          *         int[] tiempos = {
-            0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
-            ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
-            ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
-            ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
-        };
+         0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
+         ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
+         ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
+         ,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,65
+         };
          */
-        
-        int[] tiempos = {
-            0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,65
-            ,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,65
-            ,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,65
-            ,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,17,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,65};
 
-                int nfragmentos = tiempos.length;
+        int[] tiempos = {
+            7, 17, 7, 17, 7, 17, 7, 17, 7, 65,
+            7, 17, 7, 17, 7, 17, 7, 17, 7, 65,
+            7, 17, 7, 17, 7, 17, 7, 17, 7, 65,
+            7, 17, 7, 17, 7, 17, 7, 17, 7, 65
+        };
+        
+        //Los huecos serán lo que hay enmedio
+        int nhuecos = tiempos.length;
 
         //Creamos los fragmentos iniciales
-        Fragmento[] fragmentos = Solucion.nuevoFragmento(nfragmentos);
+        Fragmento[] fragmentos = Solucion.nuevoFragmento(nhuecos);
+        
+        
+        //Calculamos los huecos
+        int[] huecos = Utiles.calcularHuecos(tiempos);
+        
+        
         /*
-        int evaluacion = Solucion.evaluar(s, dositemsets, tiempos);
+         int evaluacion = Solucion.evaluar(s, dositemsets, tiempos);
 
-        System.out.println(s);
-        System.out.println(evaluacion);
+         System.out.println(s);
+         System.out.println(evaluacion);
 
-        Solucion mejorBL = Utiles.BL(s, dositemsets, tiempos);
-        int evaluacion2 = Solucion.evaluar(mejorBL, dositemsets, tiempos);
+         Solucion mejorBL = Utiles.BL(s, dositemsets, tiempos);
+         int evaluacion2 = Solucion.evaluar(mejorBL, dositemsets, tiempos);
 
-        System.out.println(mejorBL);
-        System.out.println(evaluacion2);
+         System.out.println(mejorBL);
+         System.out.println(evaluacion2);
 
-*/
+         */
 
         //Realizar N búsquedas locales y quedarnos con la mejor
-        int N = 1000;
-        Solucion mejor = Solucion.Aleatoria(asignaturas, fragmentos);
-        mejor = Utiles.BLprimerMejor(mejor, dositemsets, tiempos);
-        double mejor_eval = Solucion.evaluar(mejor, dositemsets, tiempos);
-        
-        System.out.println(mejor_eval + "\t" + mejor);
-        
+        int N = 10;
+        Sol mejor = Sol.Aleatoria(asignaturas, nhuecos);
+        mejor = Utiles.ALprimerMejor(mejor, dositemsets, huecos);
+        Evaluacion mejor_eval = Sol.evaluarComp(mejor, dositemsets, huecos);
+
+        System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+
         for (int i = 0; i < N; i++) {
             //Crear solución aleatoria
-            Solucion solucion = Solucion.Aleatoria(asignaturas, fragmentos);
-            
+            Sol solucion = Sol.Aleatoria(asignaturas, nhuecos);
+
             //Búsqueda local
-            Solucion sBL = Utiles.BLprimerMejor(solucion, dositemsets, tiempos);
-            double seval = Solucion.evaluar(sBL, dositemsets, tiempos);
+            System.out.println("--------------------------AL1-----------------------");
+            Sol sBL1 = Utiles.ALprimerMejor(solucion, dositemsets, huecos); //Primero mejoramos de forma aleatoria
+            System.out.println("--------------------------AL2-----------------------");
+            Sol sBL2 = Utiles.ALprimerMejor2(sBL1, dositemsets, huecos); //Después afinamos un poco
+            System.out.println("--------------------------BL-----------------------");
+            Sol sBL = Utiles.BLprimerMejor(sBL2, dositemsets, huecos); //Después hacemos BL
+            Evaluacion seval = Sol.evaluarComp(sBL, dositemsets, huecos);
 
             //System.out.println(solucion + " -> " + sBL);
-            
-            if(seval > mejor_eval){
+
+            if (seval.total() > mejor_eval.total()) {
                 mejor_eval = seval;
                 mejor = sBL;
-                System.out.println(mejor_eval + "\t" + mejor);
+                System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
             }
 
             //System.out.println(mejor_eval);
-            System.out.println(seval + "\t" + sBL);
+            System.out.println(seval.colisiones + "\t"+ seval.puntos +"\t" + sBL);
         }
 
-        
+        System.out.println("La mejor solución es" + mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+        Utiles.guardarArchivo("mejorSolucion.txt", "La mejor solución es" + mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
 
 
         //Necesitamos soluciones completas ya que todas son consistentes -> metaheurísticas
