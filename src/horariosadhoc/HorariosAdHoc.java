@@ -28,9 +28,24 @@ public class HorariosAdHoc {
      */
     public static void main(String[] args) throws InterruptedException {
         // TODO code application logic here
+        
+        //Parámetros
+        
 
         //Obtener datos
+        
+        //Lista de asignaturas a tener en cuenta
+        //ArrayList<Asignatura> asignaturas_validas = Cargador.leer_asignaturas("AsignaturasValidas.txt");
+        
+        //DatosMatriculas da = Cargador.leer_y_comprobar_matriculas(asignaturas_validas, "AsignaturasPrueba.txt");
+        
         DatosMatriculas da = Cargador.leer_matriculas("AsignaturasPrueba.txt");
+        
+        //Fechas de inicio y fin de la temporada de exámenes
+        Calendar fecha_de_inicio = new GregorianCalendar(2013, Calendar.JUNE, 13, 9,00);
+        Calendar fecha_de_fin = new GregorianCalendar(2013, Calendar.JULY, 11, 23,59);
+        
+
 
         //Preprocesar datos
         FrequenceGraph fg = Utiles.montarFG(da);
@@ -115,8 +130,8 @@ public class HorariosAdHoc {
         //Definición del problema
         
         //Fecha de inicio
-        Calendar fini = new GregorianCalendar(2013, Calendar.JUNE, 13, 9,00);
-        Calendar ffin = new GregorianCalendar(2013, Calendar.JULY, 12);
+        Calendar fini = fecha_de_inicio;
+        Calendar ffin = fecha_de_fin;
         
         //Tiempos
         ArrayList<Integer> Horas = CalendarioExamenes.horas(fini, ffin);
@@ -158,7 +173,7 @@ public class HorariosAdHoc {
         //HebraEjecutora h = new HebraEjecutora(asignaturas, nhuecos, dositemsets, huecos);
 
         //Realizar N búsquedas locales y quedarnos con la mejor
-        int N = 800;
+        int N = 10;
         control.max_ejecuciones = N;
         
         for(int i=0; i<N; i++){
