@@ -49,6 +49,9 @@ public class Cargador {
                     //para cada cadena anotar la asignatura
                     for(String texto_asignatura : ld){
                         
+                        //Hacemos el trim a la cadena
+                        texto_asignatura = texto_asignatura.trim();
+                        
                         //comprobamos si existe
                         Asignatura asignatura = Asignatura.existentes.get(texto_asignatura);
                         //Si no existe la creamos
