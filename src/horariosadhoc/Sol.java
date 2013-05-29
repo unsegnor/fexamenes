@@ -190,5 +190,13 @@ class Sol {
         
         return sb.toString();
     }
+
+    String bonita() {
+        StringBuilder sb = new StringBuilder();
+        
+        
+        
+        return sb.toString();
+    }
     
 }
