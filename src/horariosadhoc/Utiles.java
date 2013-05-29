@@ -385,7 +385,7 @@ public class Utiles {
                         mejor = vecino;
                         //Hemos terminado con esta posición, volvemos a empezar
 
-                        System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+                        //System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
                         reiniciar = true;
                     }
                 }
@@ -432,7 +432,7 @@ public class Utiles {
                         mejor = vecino;
                         //Hemos terminado con esta posición, volvemos a empezar
 
-                        System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+                        //System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
                         reiniciar = true;
                     }
                 }
@@ -481,7 +481,7 @@ public class Utiles {
                             mejor = vecino;
                             //Hemos terminado con esta posición, volvemos a empezar
 
-                            System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+                            //System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
                             reiniciar = true;
                         }
                     }
