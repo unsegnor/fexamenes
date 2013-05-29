@@ -319,7 +319,7 @@ public class Utiles {
             double max_eval = Double.MIN_VALUE;
 
             int l = mejor.s.length;
-            
+
             boolean reiniciar = false;
             for (int a = 0; a < l && !reiniciar; a++) {
                 for (int b = a + 1; b < l && !reiniciar; b++) {
@@ -336,22 +336,189 @@ public class Utiles {
                             mejor_eval = eval;
                             mejor = vecino;
                             //Hemos terminado con esta posición, volvemos a empezar
-                            
-                            System.out.println(mejor_eval.colisiones + "\t"+ mejor_eval.puntos + "\t" + mejor);
+
+                            System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
                             reiniciar = true;
                         }
                     }
                 }
             }
-            
+
             //Si llegamos aquí y reiniciar es false es que hemos comprobado todos los vecinos y ninguno es mejor
             //hemos terminado
-            
-            if(!reiniciar){
+
+            if (!reiniciar) {
                 parar = true;
             }
         }
 
         return mejor;
+    }
+
+    static Sol ALprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos) {
+        Sol mejor = s.copia();
+        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos);
+        boolean parar = false;
+
+        while (!parar) {
+
+            //Obtener el vecindario //TODO esta función se come mucha memoria, mejor calcularlos y evaluarlos uno a uno
+            //Solucion[] vecinos = Solucion.vecinos(mejor);
+
+            double max_eval = Double.MIN_VALUE;
+
+            int l = mejor.solucion.size() * 100;
+
+            boolean reiniciar = false;
+            for (int a = 0; a < l && !reiniciar; a++) {
+                //Modificar
+                Sol vecino = Sol.Mutar(mejor);
+                //Si hay respuesta comprobamos si es mejor que la actual
+                if (vecino != null) {
+                    //Si es mejor que la mejor pasa a ser la mejor y repetimos
+
+                    //Evaluar
+                    Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos);
+                    //Si la evaluación es mejor pasa a ser la mejor solución
+                    if (eval.total() > mejor_eval.total()) {
+                        mejor_eval = eval;
+                        mejor = vecino;
+                        //Hemos terminado con esta posición, volvemos a empezar
+
+                        System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+                        reiniciar = true;
+                    }
+                }
+            }
+
+            //Si llegamos aquí y reiniciar es false es que hemos comprobado todos los vecinos y ninguno es mejor
+            //hemos terminado
+
+            if (!reiniciar) {
+                parar = true;
+            }
+        }
+
+        return mejor;
+    }
+
+    static Sol ALprimerMejor2(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos) {
+        Sol mejor = s.copia();
+        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos);
+        boolean parar = false;
+
+        while (!parar) {
+
+            //Obtener el vecindario //TODO esta función se come mucha memoria, mejor calcularlos y evaluarlos uno a uno
+            //Solucion[] vecinos = Solucion.vecinos(mejor);
+
+            double max_eval = Double.MIN_VALUE;
+
+            int l = mejor.solucion.size() * 100;
+
+            boolean reiniciar = false;
+            for (int a = 0; a < l && !reiniciar; a++) {
+                //Modificar
+                Sol vecino = Sol.Mutar2(mejor);
+                //Si hay respuesta comprobamos si es mejor que la actual
+                if (vecino != null) {
+                    //Si es mejor que la mejor pasa a ser la mejor y repetimos
+
+                    //Evaluar
+                    Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos);
+                    //Si la evaluación es mejor pasa a ser la mejor solución
+                    if (eval.total() > mejor_eval.total()) {
+                        mejor_eval = eval;
+                        mejor = vecino;
+                        //Hemos terminado con esta posición, volvemos a empezar
+
+                        System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+                        reiniciar = true;
+                    }
+                }
+            }
+
+            //Si llegamos aquí y reiniciar es false es que hemos comprobado todos los vecinos y ninguno es mejor
+            //hemos terminado
+
+            if (!reiniciar) {
+                parar = true;
+            }
+        }
+
+        return mejor;
+    }
+
+    static Sol BLprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos) {
+        Sol mejor = s.copia();
+        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos);
+        boolean parar = false;
+
+        while (!parar) {
+
+            //Obtener el vecindario //TODO esta función se come mucha memoria, mejor calcularlos y evaluarlos uno a uno
+            //Solucion[] vecinos = Solucion.vecinos(mejor);
+
+            double max_eval = Double.MIN_VALUE;
+
+            int l = mejor.solucion.size();
+            int nhuecos = mejor.nhuecos;
+
+            boolean reiniciar = false;
+            for (int incremento = 1; incremento < nhuecos && !reiniciar; incremento++) {
+                for (int elemento = 0; elemento < l && !reiniciar; elemento++) {
+                    //Modificar
+                    Sol vecino = Sol.cambiar(mejor, elemento, incremento);
+                    //Si hay respuesta comprobamos si es mejor que la actual
+                    if (vecino != null) {
+                        //Si es mejor que la mejor pasa a ser la mejor y repetimos
+
+                        //Evaluar
+                        Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos);
+                        //Si la evaluación es mejor pasa a ser la mejor solución
+                        if (eval.total() > mejor_eval.total()) {
+                            mejor_eval = eval;
+                            mejor = vecino;
+                            //Hemos terminado con esta posición, volvemos a empezar
+
+                            System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+                            reiniciar = true;
+                        }
+                    }
+                }
+            }
+
+            //Si llegamos aquí y reiniciar es false es que hemos comprobado todos los vecinos y ninguno es mejor
+            //hemos terminado
+
+            if (!reiniciar) {
+                parar = true;
+            }
+        }
+
+        return mejor;
+    }
+
+    /**
+     * Los huecos son uno más que los tiempos. El primer hueco contiene un 0 y
+     * los siguientes van sumando los tiempos. Por ejemplo si los tiempos son
+     * {1,1,1,2} los huecos serán {0,1,2,3,5}
+     *
+     */
+    static int[] calcularHuecos(int[] tiempos) {
+        int l = tiempos.length + 1;
+        int[] respuesta = new int[l];
+
+        respuesta[0] = 0;
+
+        int actual = 0;
+
+        for (int i = 1; i < l; i++) {
+
+            actual = actual + tiempos[i - 1]; //Vamos acumulando los tiempos
+
+            respuesta[i] = actual;
+        }
+        return respuesta;
     }
 }
