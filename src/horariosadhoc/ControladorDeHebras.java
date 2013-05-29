@@ -5,6 +5,7 @@
 package horariosadhoc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 
@@ -21,6 +22,8 @@ public class ControladorDeHebras {
     public int contador = 0;
     public int max_ejecuciones = 0;
     private final ExecutorService exec;
+    int[] tiempos;
+    Calendar fini;
     
     
     ControladorDeHebras(ExecutorService exec){
@@ -65,12 +68,24 @@ public class ControladorDeHebras {
             Collections.sort(asignaciones, new ComparadorDeAsignaciones());
             //Pasar a calendario
             //Imprimir guay
+            
+            Calendar fecha = this.fini;
+            
             int actual = 0;
-            System.out.println("-------------------"+actual+"--------------------------");
+            System.out.println("Exámenes de incidencia previstos: " + mejor_colisiones);
+            System.out.println("Puntuación del calendario: " + mejor_puntuacion);
+            System.out.println("---------------------------------------------");
+            System.out.println(fecha.get(Calendar.DAY_OF_MONTH) +"/"+ (fecha.get(Calendar.MONTH)+1) +"/"+ fecha.get(Calendar.YEAR) +" - "+ fecha.get(Calendar.HOUR_OF_DAY) +":"+ fecha.get(Calendar.MINUTE));
+            System.out.println("---------------------------------------------");
             for(Asignacion a: asignaciones){
                 if(a.numero > actual){
-                    actual = a.numero;
-                    System.out.println("-------------------"+actual+"--------------------------");
+                    while(actual<a.numero){
+                    fecha.add(Calendar.HOUR, tiempos[actual]);
+                    actual++;
+                    }
+                    System.out.println("---------------------------------------------");
+                    System.out.println(fecha.get(Calendar.DAY_OF_MONTH) +"/"+ (fecha.get(Calendar.MONTH)+1) +"/"+ fecha.get(Calendar.YEAR) +" - "+ fecha.get(Calendar.HOUR_OF_DAY) +":"+ fecha.get(Calendar.MINUTE));
+                    System.out.println("---------------------------------------------");
                 }
                 System.out.println(a.asignatura);
             }

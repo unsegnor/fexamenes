@@ -6,7 +6,9 @@ package horariosadhoc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -112,13 +114,31 @@ public class HorariosAdHoc {
 
         //Definición del problema
         
-        int[] tiempos = {
+        //Fecha de inicio
+        Calendar fini = new GregorianCalendar(2013, Calendar.JUNE, 13, 9,00);
+        Calendar ffin = new GregorianCalendar(2013, Calendar.JULY, 12);
+        
+        //Tiempos
+        ArrayList<Integer> Horas = CalendarioExamenes.horas(fini, ffin);
+        
+        int[] tiempos = new int[Horas.size()];
+        
+        int c=0;
+        for(Integer hora : Horas){
+            tiempos[c] = hora.intValue();
+            c++;
+        }
+        
+        
+        //int[] tiempos = 
+        /*
+        {
             7, 17, 7, 17, 7, 17, 7, 17, 7, 65,
             7, 17, 7, 17, 7, 17, 7, 17, 7, 65,
             7, 17, 7, 17, 7, 17, 7, 17, 7, 65,
             7, 17, 7, 17, 7, 17, 7, 17, 7, 65
         };
-        
+        */
         //Los huecos serán lo que hay enmedio
         int nhuecos = tiempos.length;
       
@@ -131,12 +151,14 @@ public class HorariosAdHoc {
         ExecutorService executor = Executors.newFixedThreadPool(8);
         
         ControladorDeHebras control = new ControladorDeHebras(executor);
+        control.fini = fini;
+        control.tiempos = tiempos;
         
         
         //HebraEjecutora h = new HebraEjecutora(asignaturas, nhuecos, dositemsets, huecos);
 
         //Realizar N búsquedas locales y quedarnos con la mejor
-        int N = 10;
+        int N = 800;
         control.max_ejecuciones = N;
         
         for(int i=0; i<N; i++){
