@@ -10,7 +10,18 @@ package horariosadhoc;
  */
 class Asignacion {
     //Relaciona una asignatura con un número
-    
+
     Asignatura asignatura = null;
-    int numero=-1;
+    int numero = -1;
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("(").append(this.asignatura).append(", ").append(this.numero).append(")");
+
+
+        return sb.toString();
+
+    }
 }

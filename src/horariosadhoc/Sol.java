@@ -50,7 +50,7 @@ class Sol {
         return respuesta;
     }
 
-    static Sol cambiar(Sol mejor, int a) {
+    static Sol cambiar(Sol mejor, int a, int sum) {
         Sol respuesta = mejor.copia();
         
         //Avanzar uno en la posición de a
@@ -61,7 +61,7 @@ class Sol {
         int maxvalor = respuesta.nhuecos;
         
         //Suma 1 al valor sin pasarse del máximo
-        int valor = (seleccionada.numero+1)%maxvalor;
+        int valor = (seleccionada.numero+sum)%maxvalor;
         
         //Realizar la asignación
         seleccionada.numero = valor;
@@ -183,7 +183,7 @@ class Sol {
         sb.append("[");
         for(Asignacion a : solucion){
             
-            sb.append("(").append(a.asignatura).append(", ").append(a.numero).append(")").append(",");
+            sb.append(a).append(",");
         }
         
         sb.append("]");

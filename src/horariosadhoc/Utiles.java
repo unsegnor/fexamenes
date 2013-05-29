@@ -367,7 +367,7 @@ public class Utiles {
 
             double max_eval = Double.MIN_VALUE;
 
-            int l = mejor.solucion.size()*100;
+            int l = mejor.solucion.size() * 100;
 
             boolean reiniciar = false;
             for (int a = 0; a < l && !reiniciar; a++) {
@@ -401,8 +401,7 @@ public class Utiles {
 
         return mejor;
     }
-    
-    
+
     static Sol ALprimerMejor2(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos) {
         Sol mejor = s.copia();
         Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos);
@@ -415,7 +414,7 @@ public class Utiles {
 
             double max_eval = Double.MIN_VALUE;
 
-            int l = mejor.solucion.size()*100;
+            int l = mejor.solucion.size() * 100;
 
             boolean reiniciar = false;
             for (int a = 0; a < l && !reiniciar; a++) {
@@ -449,7 +448,7 @@ public class Utiles {
 
         return mejor;
     }
-    
+
     static Sol BLprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos) {
         Sol mejor = s.copia();
         Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos);
@@ -463,25 +462,28 @@ public class Utiles {
             double max_eval = Double.MIN_VALUE;
 
             int l = mejor.solucion.size();
+            int nhuecos = mejor.nhuecos;
 
             boolean reiniciar = false;
-            for (int a = 0; a < l && !reiniciar; a++) {
-                //Modificar
-                Sol vecino = Sol.cambiar(mejor,a);
-                //Si hay respuesta comprobamos si es mejor que la actual
-                if (vecino != null) {
-                    //Si es mejor que la mejor pasa a ser la mejor y repetimos
+            for (int incremento = 1; incremento < nhuecos && !reiniciar; incremento++) {
+                for (int elemento = 0; elemento < l && !reiniciar; elemento++) {
+                    //Modificar
+                    Sol vecino = Sol.cambiar(mejor, elemento, incremento);
+                    //Si hay respuesta comprobamos si es mejor que la actual
+                    if (vecino != null) {
+                        //Si es mejor que la mejor pasa a ser la mejor y repetimos
 
-                    //Evaluar
-                    Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos);
-                    //Si la evaluación es mejor pasa a ser la mejor solución
-                    if (eval.total() > mejor_eval.total()) {
-                        mejor_eval = eval;
-                        mejor = vecino;
-                        //Hemos terminado con esta posición, volvemos a empezar
+                        //Evaluar
+                        Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos);
+                        //Si la evaluación es mejor pasa a ser la mejor solución
+                        if (eval.total() > mejor_eval.total()) {
+                            mejor_eval = eval;
+                            mejor = vecino;
+                            //Hemos terminado con esta posición, volvemos a empezar
 
-                        System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
-                        reiniciar = true;
+                            System.out.println(mejor_eval.colisiones + "\t" + mejor_eval.puntos + "\t" + mejor);
+                            reiniciar = true;
+                        }
                     }
                 }
             }
