@@ -30,20 +30,30 @@ public class HorariosAdHoc {
         // TODO code application logic here
         
         //Parámetros
+        int nhebras = 10;
+        int nbusquedas = 100;
+        String archivo_matriculaciones = "AsignaturasPrueba.txt";
         
-
+        int dia_i = 2; //13/5/2013
+        int mes_i = 8;
+        int anio_i = 2013;
+        
+        int dia_f = 20; //11/6/2013
+        int mes_f = 8;
+        int anio_f = 2013;
+        
         //Obtener datos
         
         //Lista de asignaturas a tener en cuenta
-        //ArrayList<Asignatura> asignaturas_validas = Cargador.leer_asignaturas("AsignaturasValidas.txt");
+        //ArrayList<Asignatura> asignaturas_validas = Cargador.leer_asignaturas(archivo_asignaturas_validas);
         
-        //DatosMatriculas da = Cargador.leer_y_comprobar_matriculas(asignaturas_validas, "AsignaturasPrueba.txt");
+        //DatosMatriculas da = Cargador.leer_y_comprobar_matriculas(asignaturas_validas, archivo_matriculaciones);
         
-        DatosMatriculas da = Cargador.leer_matriculas("AsignaturasPrueba.txt");
+        DatosMatriculas da = Cargador.leer_matriculas(archivo_matriculaciones);
         
         //Fechas de inicio y fin de la temporada de exámenes
-        Calendar fecha_de_inicio = new GregorianCalendar(2013, Calendar.JUNE, 13, 9,00);
-        Calendar fecha_de_fin = new GregorianCalendar(2013, Calendar.JULY, 11, 23,59);
+        Calendar fecha_de_inicio = new GregorianCalendar(anio_i, mes_i, dia_i, 9,00);
+        Calendar fecha_de_fin = new GregorianCalendar(anio_f, mes_f, dia_f, 23,59);
         
 
 
@@ -103,8 +113,6 @@ public class HorariosAdHoc {
 
 
 
-        int ndias = 28;
-
 
         //Lo modificamos como queramos, por ejemplo, cada 7 añadimos 2 prohibidos
 
@@ -155,7 +163,7 @@ public class HorariosAdHoc {
         };
         */
         //Los huecos serán lo que hay enmedio
-        int nhuecos = tiempos.length;
+        int nhuecos = tiempos.length+1;
       
         //Calculamos los huecos
         int[] huecos = Utiles.calcularHuecos(tiempos);
@@ -163,17 +171,18 @@ public class HorariosAdHoc {
         
         
         //Creamos las herramientas para paralelizar
-        ExecutorService executor = Executors.newFixedThreadPool(8);
+        ExecutorService executor = Executors.newFixedThreadPool(nhebras);
         
         ControladorDeHebras control = new ControladorDeHebras(executor);
         control.fini = fini;
         control.tiempos = tiempos;
         
         
+        
         //HebraEjecutora h = new HebraEjecutora(asignaturas, nhuecos, dositemsets, huecos);
 
         //Realizar N búsquedas locales y quedarnos con la mejor
-        int N = 10;
+        int N = nbusquedas;
         control.max_ejecuciones = N;
         
         for(int i=0; i<N; i++){

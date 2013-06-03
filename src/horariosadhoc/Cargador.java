@@ -55,8 +55,6 @@ public class Cargador {
                     //Si el texto es igual a la cadena vacía lo obviamos
                     if (!"".equals(texto_asignatura)) {
 
-
-
                         //comprobamos si existe
                         Asignatura asignatura = Asignatura.existentes.get(texto_asignatura);
                         //Si no existe la creamos
