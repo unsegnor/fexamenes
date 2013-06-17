@@ -68,6 +68,56 @@ class Sol {
         
         return respuesta;
     }
+
+    static HashMap<Integer, Integer> calcularHistograma(Sol solucion, HashMap<ParAsig, Integer> afectados, int[] huecos) {
+        HashMap<Integer, Integer> respuesta = new HashMap<Integer, Integer>();
+        
+        boolean valido = true;
+
+        int nasig = solucion.solucion.size();
+
+        for (int a = 0; valido && a < nasig; a++) {
+            int tiempo_estudio = 0;
+            for (int b = a + 1; valido && b < nasig; b++) {
+                
+                //Si los dos espacios tienen asignatura
+                Asignatura a1 = solucion.solucion.get(a).asignatura;
+                Asignatura a2 = solucion.solucion.get(b).asignatura;
+                
+                //Calculamos el tiempo de estudio
+                int hueco1 = solucion.solucion.get(a).numero;
+                int hueco2 = solucion.solucion.get(b).numero;
+                int t1 = huecos[hueco1];
+                int t2 = huecos[hueco2];
+                
+                tiempo_estudio = Math.abs(t2-t1);
+                
+                
+                if (a1 != null && a2 != null) {
+                    //Si hay afectados entonces sumamos algo, sino nada
+                    Integer nafectados = afectados.get(new ParAsig(a1, a2));
+                    if (nafectados != null) {
+                       //Añadimos datos al histograma
+                       //Comprobar si existe la entrada (tiempo de estudio)
+                       Integer actual = respuesta.get(tiempo_estudio);
+                       
+                       if(actual==null){
+                           //Si no existe actual es 0, se crea cuando lo introduzcamos la primera vez
+                           actual = 0;
+                       }
+                       
+                       //Sumamos los afectados
+                       actual+=nafectados;
+                       
+                       //Lo actualizamos
+                       respuesta.put(tiempo_estudio, actual);
+                    }
+                }
+            }
+        }
+        
+        return respuesta;
+    }
     
         //Representación de una solución
     ArrayList<Asignacion> solucion = new ArrayList<Asignacion>();

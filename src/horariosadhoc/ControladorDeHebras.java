@@ -7,6 +7,8 @@ package horariosadhoc;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -24,6 +26,8 @@ public class ControladorDeHebras {
     private final ExecutorService exec;
     int[] tiempos;
     Calendar fini;
+    int[] huecos;
+    HashMap<ParAsig, Integer> afectados;
     
     
     ControladorDeHebras(ExecutorService exec){
@@ -90,6 +94,28 @@ public class ControladorDeHebras {
                 System.out.println(a.asignatura);
             }
             //System.out.println(asignaciones);
+            
+            //Calcular histograma de la solución
+            HashMap<Integer, Integer> histograma = Sol.calcularHistograma(mejor_solucion, afectados, huecos);
+            
+            Evaluacion evalu = Sol.evaluarComp(mejor_solucion, afectados, huecos);
+            
+            //Vector en el que lo vamos a almacenar
+            ArrayList<Posicion<Integer> > vhistograma = new ArrayList<Posicion<Integer> >();
+            
+            //Pasar histograma a vector
+            for(Entry<Integer,Integer> e : histograma.entrySet()){
+                Posicion<Integer> p = new Posicion<Integer>(e.getValue(), e.getKey());
+                vhistograma.add(p);
+            }
+            
+            //Ordenar vector
+            Collections.sort(vhistograma, new OrdenarPosiciones());
+            
+            //Imprimir histograma
+            for(Posicion p : vhistograma){
+                System.out.println(p.valor + "," + (Integer)p.cosa);
+            }
         }
 
     }

@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -225,6 +226,58 @@ public class Cargador {
             //Aquí tenemos todas las matriculaciones en la lista "matriculas"
             //montamos el objeto de datos de respuesta
             da.matriculaciones = matriculas;
+
+
+
+            //------------------------------------------------------------------------------------------------------
+
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Cargador.class.getName()).log(Level.SEVERE, null, ex);
+
+        } catch (IOException ex) {
+            Logger.getLogger(Cargador.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                fr.close();
+            } catch (IOException ex) {
+                Logger.getLogger(Cargador.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return da;
+    }
+
+    static HashMap<Asignatura, String> leer_codigos(String archivo) {
+        FileReader fr = null;
+        BufferedReader br = null;
+        HashMap<Asignatura, String> da = null;
+        try {
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+            da = new HashMap<Asignatura, String>();
+
+            //------------------------------------------------------------------------------------------------------
+
+
+            String linea = br.readLine();
+
+            while (linea != null) {
+
+                //tratar la línea
+                //Cada línea es una asignatura de la forma código;nombre
+                //Hacemos el trim a la cadena
+                String texto_asignatura = linea.trim();
+                //Si el texto es igual a la cadena vacía lo obviamos
+                if (!"".equals(texto_asignatura)) {
+                    Asignatura asignatura = new Asignatura();
+                    asignatura.ID = texto_asignatura;
+                    //y la añadimos a la lista
+
+                    //da.add(asignatura);
+                }
+
+
+                linea = br.readLine();
+            }
 
 
 

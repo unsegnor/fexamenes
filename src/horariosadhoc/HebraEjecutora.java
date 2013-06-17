@@ -45,7 +45,7 @@ public class HebraEjecutora implements Runnable {
 
             //System.out.println(mejor_eval);
             //System.out.println(eval.colisiones + "\t"+ eval.puntos +"\t" + sBL);
-            control.heTerminado(eval, solucion);
+            control.heTerminado(eval, sBL);
     }
     
 }

@@ -33,6 +33,7 @@ public class HorariosAdHoc {
         int nhebras = 10;
         int nbusquedas = 100;
         String archivo_matriculaciones = "AsignaturasPrueba.txt";
+        String archivo_codigos = "RelacionAsignaturasGrados.csv";
         
         int dia_i = 2; //13/5/2013
         int mes_i = 8;
@@ -48,6 +49,8 @@ public class HorariosAdHoc {
         //ArrayList<Asignatura> asignaturas_validas = Cargador.leer_asignaturas(archivo_asignaturas_validas);
         
         //DatosMatriculas da = Cargador.leer_y_comprobar_matriculas(asignaturas_validas, archivo_matriculaciones);
+        
+        //HashMap<Asignatura, String> codigos = Cargador.leer_codigos(archivo_codigos);
         
         DatosMatriculas da = Cargador.leer_matriculas(archivo_matriculaciones);
         
@@ -176,6 +179,8 @@ public class HorariosAdHoc {
         ControladorDeHebras control = new ControladorDeHebras(executor);
         control.fini = fini;
         control.tiempos = tiempos;
+        control.huecos = huecos;
+        control.afectados = dositemsets;
         
         
         
