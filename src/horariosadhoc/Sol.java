@@ -13,6 +13,8 @@ import java.util.Random;
  * @author Victor
  */
 class Sol {
+    private static float penalizacion_bajo_media = 10;
+    private static float penalizacion_sobre_media = 1;
 
     static Sol Mutar(Sol mejor) {
         Sol respuesta = mejor.copia();
@@ -216,7 +218,8 @@ class Sol {
                 tiempo_estudio = Math.abs(t2-t1);
                 
                 //Comprobamos la diferencia entre el tiempo de estudio real y el deseado
-                float difftestudio = Math.abs(tdeseado - tiempo_estudio);
+                float difftestudio = tdeseado - tiempo_estudio;
+                float absdiff = Math.abs(difftestudio);
                 
                 
                 if (a1 != null && a2 != null) {
@@ -224,15 +227,23 @@ class Sol {
                     Integer nafectados = afectados.get(new ParAsig(a1, a2));
                     if (nafectados != null) {
                         //Tenemos que intentar reducir la diferencia entre los tiempos así que lo restaremos
-                        if (tiempo_estudio > 0) {
-                            puntos -= Math.log(difftestudio) * nafectados;
+                        if (tiempo_estudio > 0) { // > 0
+                            //Si estamos por debajo de la media penalizamos más que si estamos por encima
+                            if(difftestudio < 0){
+                            //Cuanto más abajo más penalizamos
+                            //usaremos una función exponencial que comienza en el infinito para x=0 hasta 0 para x=tdeseado
+                                puntos -= (Math.pow(2, tdeseado/tiempo_estudio)-2) * nafectados;
+                            }else if (difftestudio > 0){
+                                puntos -= Math.log(absdiff) * nafectados;
+                            }
+                                
                         }
 
                         //No se permiten tiempos iguales a 0
                         /*if(tiempo_estudio==0){
                          valido = false;
                          }*/
-                        if(tiempo_estudio==0){
+                        if(tiempo_estudio == 0){ // == 0
                             colisiones+=nafectados;
                         }
                     }

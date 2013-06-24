@@ -332,7 +332,7 @@ public class Utiles {
                         //Evaluar
                         Evaluacion eval = Solucion.evaluarComp(vecino, afectados, tiempos);
                         //Si la evaluación es mejor pasa a ser la mejor solución
-                        if (eval.total() > mejor_eval.total()) {
+                        if (eval.es_mejor_que(mejor_eval)) {
                             mejor_eval = eval;
                             mejor = vecino;
                             //Hemos terminado con esta posición, volvemos a empezar
@@ -380,7 +380,7 @@ public class Utiles {
                     //Evaluar
                     Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos, tdeseado);
                     //Si la evaluación es mejor pasa a ser la mejor solución
-                    if (eval.total() > mejor_eval.total()) {
+                    if (eval.es_mejor_que(mejor_eval)) {
                         mejor_eval = eval;
                         mejor = vecino;
                         //Hemos terminado con esta posición, volvemos a empezar
@@ -427,7 +427,7 @@ public class Utiles {
                     //Evaluar
                     Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos);
                     //Si la evaluación es mejor pasa a ser la mejor solución
-                    if (eval.total() > mejor_eval.total()) {
+                    if (eval.es_mejor_que(mejor_eval)) {
                         mejor_eval = eval;
                         mejor = vecino;
                         //Hemos terminado con esta posición, volvemos a empezar
@@ -476,7 +476,7 @@ public class Utiles {
                         //Evaluar
                         Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos, tdeseado);
                         //Si la evaluación es mejor pasa a ser la mejor solución
-                        if (eval.total() > mejor_eval.total()) {
+                        if (eval.es_mejor_que(mejor_eval)) {
                             mejor_eval = eval;
                             mejor = vecino;
                             //Hemos terminado con esta posición, volvemos a empezar
