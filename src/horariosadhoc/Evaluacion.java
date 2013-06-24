@@ -15,7 +15,7 @@ class Evaluacion {
     public double total(){
         double respuesta = 0;
         if(colisiones>0){
-            respuesta = -colisiones;
+            respuesta = -colisiones * 1000000;
         }
         else{
             respuesta = puntos;

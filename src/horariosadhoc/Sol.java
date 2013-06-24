@@ -187,6 +187,70 @@ class Sol {
         
         return eval;
     }
+    
+    //En esta función damos mayor puntuación al que más se aproxima al tiempo de estudio deseado
+    static Evaluacion evaluarComp(Sol mejor, HashMap<ParAsig, Integer> afectados, int[] huecos, float tdeseado) {
+        
+        Evaluacion eval = new Evaluacion();
+        
+        double puntos = 0;
+        int colisiones = 0;
+        boolean valido = true;
+
+        int nasig = mejor.solucion.size();
+
+        for (int a = 0; valido && a < nasig; a++) {
+            int tiempo_estudio = 0;
+            for (int b = a + 1; valido && b < nasig; b++) {
+                
+                //Si los dos espacios tienen asignatura
+                Asignatura a1 = mejor.solucion.get(a).asignatura;
+                Asignatura a2 = mejor.solucion.get(b).asignatura;
+                
+                //Calculamos el tiempo de estudio
+                int hueco1 = mejor.solucion.get(a).numero;
+                int hueco2 = mejor.solucion.get(b).numero;
+                int t1 = huecos[hueco1];
+                int t2 = huecos[hueco2];
+                
+                tiempo_estudio = Math.abs(t2-t1);
+                
+                //Comprobamos la diferencia entre el tiempo de estudio real y el deseado
+                float difftestudio = Math.abs(tdeseado - tiempo_estudio);
+                
+                
+                if (a1 != null && a2 != null) {
+                    //Si hay afectados entonces sumamos algo, sino nada
+                    Integer nafectados = afectados.get(new ParAsig(a1, a2));
+                    if (nafectados != null) {
+                        //Tenemos que intentar reducir la diferencia entre los tiempos así que lo restaremos
+                        if (tiempo_estudio > 0) {
+                            puntos -= Math.log(difftestudio) * nafectados;
+                        }
+
+                        //No se permiten tiempos iguales a 0
+                        /*if(tiempo_estudio==0){
+                         valido = false;
+                         }*/
+                        if(tiempo_estudio==0){
+                            colisiones+=nafectados;
+                        }
+                    }
+                }
+            }
+        }
+
+        //Si no es válido entonces evaluación = 0;
+        if (!valido) {
+            puntos = 0;
+        }
+        
+        //Rellenamos la evaluación
+        eval.puntos= puntos;
+        eval.colisiones = colisiones;
+        
+        return eval;
+    }
 
 
     

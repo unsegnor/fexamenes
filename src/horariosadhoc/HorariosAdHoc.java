@@ -30,13 +30,13 @@ public class HorariosAdHoc {
         // TODO code application logic here
         
         //Parámetros
-        int nhebras = 10;
-        int nbusquedas = 100;
+        int nhebras = 8;
+        int nbusquedas = 16;
         String archivo_matriculaciones = "AsignaturasPrueba.txt";
         String archivo_codigos = "RelacionAsignaturasGrados.csv";
         
         int dia_i = 2; //13/5/2013
-        int mes_i = 8;
+        int mes_i = 7;
         int anio_i = 2013;
         
         int dia_f = 20; //11/6/2013
@@ -217,7 +217,7 @@ public class HorariosAdHoc {
         control.max_ejecuciones = N;
         
         for(int i=0; i<N; i++){
-            executor.execute(new HebraEjecutora(control, asignaturas, nhuecos, dositemsets, huecos));
+            executor.execute(new HebraEjecutora(control, asignaturas, nhuecos, dositemsets, huecos, testudio_deseado));
         }
         
         //executor.awaitTermination(1, TimeUnit.DAYS);

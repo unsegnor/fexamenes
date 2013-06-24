@@ -355,9 +355,9 @@ public class Utiles {
         return mejor;
     }
 
-    static Sol ALprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos) {
+    static Sol ALprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos, float tdeseado) {
         Sol mejor = s.copia();
-        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos);
+        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos, tdeseado);
         boolean parar = false;
 
         while (!parar) {
@@ -378,7 +378,7 @@ public class Utiles {
                     //Si es mejor que la mejor pasa a ser la mejor y repetimos
 
                     //Evaluar
-                    Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos);
+                    Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos, tdeseado);
                     //Si la evaluación es mejor pasa a ser la mejor solución
                     if (eval.total() > mejor_eval.total()) {
                         mejor_eval = eval;
@@ -449,9 +449,9 @@ public class Utiles {
         return mejor;
     }
 
-    static Sol BLprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos) {
+    static Sol BLprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos, float tdeseado) {
         Sol mejor = s.copia();
-        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos);
+        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos, tdeseado);
         boolean parar = false;
 
         while (!parar) {
@@ -474,7 +474,7 @@ public class Utiles {
                         //Si es mejor que la mejor pasa a ser la mejor y repetimos
 
                         //Evaluar
-                        Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos);
+                        Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos, tdeseado);
                         //Si la evaluación es mejor pasa a ser la mejor solución
                         if (eval.total() > mejor_eval.total()) {
                             mejor_eval = eval;
