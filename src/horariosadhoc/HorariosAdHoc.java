@@ -50,9 +50,23 @@ public class HorariosAdHoc {
         
         //DatosMatriculas da = Cargador.leer_y_comprobar_matriculas(asignaturas_validas, archivo_matriculaciones);
         
+        //Leemos la relación de códigos con nombre de las asignaturas
         //HashMap<Asignatura, String> codigos = Cargador.leer_codigos(archivo_codigos);
         
+        
         DatosMatriculas da = Cargador.leer_matriculas(archivo_matriculaciones);
+        
+        //Leemos las asignaturas matriculadas por cada matriculación para sacar el número medio
+        int n_asignaturas = 0;
+        for(Matriculacion mat : da.matriculaciones){
+            n_asignaturas += mat.asignaturas.size();
+        }
+        //Calculamos la media de asignaturas matriculadas por estudiante
+        float media_asignaturas = (float) n_asignaturas / (float) da.matriculaciones.size();
+        
+        System.out.println("Los estudiantes se han matriculado de una media de " + media_asignaturas + " asignaturas");
+        System.out.println("Se han contado " + Asignatura.existentes.size() + " asignaturas diferentes.");
+        
         
         //Fechas de inicio y fin de la temporada de exámenes
         Calendar fecha_de_inicio = new GregorianCalendar(anio_i, mes_i, dia_i, 9,00);
@@ -170,6 +184,18 @@ public class HorariosAdHoc {
       
         //Calculamos los huecos
         int[] huecos = Utiles.calcularHuecos(tiempos);
+        
+        //Sumar tiempo total de la temporada de exámenes es el tiempo hasta el último hueco
+        int ttotal = huecos[huecos.length-1];
+        
+        System.out.println("La temporada de exámenes dura en total " + ttotal + " unidades de tiempo.");
+        
+        //Calculamos el tiempo de estudio objetivo
+        
+        float testudio_deseado = (float) ttotal / media_asignaturas;
+        
+        System.out.println("El tiempo de estudio deseado es de " + testudio_deseado + " unidades de tiempo.");
+        
         
         
         
