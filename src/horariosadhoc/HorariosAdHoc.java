@@ -32,17 +32,17 @@ public class HorariosAdHoc {
         //Parámetros
         int nhebras = 8;
         int nbusquedas = 32;
-        String archivo_matriculaciones = "AsignaturasPrueba.txt";
+        String archivo_matriculaciones = "MatriculacionesTodas";
         String archivo_codigos = "RelacionAsignaturasGrados.csv";
-        String archivo_asignaturas_validas = "RelacionAsignaturasGrados.csv";
+        String archivo_asignaturas_validas = "RelacionAsignaturasTodas.csv";
 
-        int dia_i = 2; //13/5/2013
-        int mes_i = 7;
-        int anio_i = 2013;
+        int dia_i = 1; //13/5/2013
+        int mes_i = 8;
+        int anio_i = 2014;
 
-        int dia_f = 20; //11/6/2013
+        int dia_f = 19; //11/6/2013
         int mes_f = 8;
-        int anio_f = 2013;
+        int anio_f = 2014;
 
         //Obtener datos
 

@@ -286,7 +286,7 @@ class Sol {
         int bajo_minimos = 0;
         boolean valido = true;
         float tdeseado = dp.tdeseado;
-        float tmin = dp.tmin;
+        float tmin = 12;//dp.tmin;
 
         int nasig = mejor.solucion.size();
 
