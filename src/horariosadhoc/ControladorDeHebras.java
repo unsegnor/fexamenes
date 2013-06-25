@@ -35,7 +35,7 @@ public class ControladorDeHebras {
     }
 
     synchronized public void heTerminado(Evaluacion eval, Sol solucion) {
-        System.out.println("Una hebra ha terminado con " + eval.colisiones + "," + eval.puntos + "," + solucion);
+        System.out.println("Una hebra ha terminado con " + eval.colisiones + " colisiones, "+ eval.bajo_minimos + " estudiantes bajo el tiempo mínimo, " + eval.puntos + " puntos, " + solucion);
         //Sumamos una ejecución más
         contador++;
 

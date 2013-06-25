@@ -105,7 +105,7 @@ public class Cargador {
         return da;
     }
 
-    static ArrayList<Asignatura> leer_asignaturas(String archivo) {
+    static ArrayList<Asignatura> leer_asignaturas(String archivo, int cuatrimestre) {
         FileReader fr = null;
         BufferedReader br = null;
         ArrayList<Asignatura> da = null;
@@ -125,13 +125,30 @@ public class Cargador {
                 //Cada línea es una asignatura
                 //Hacemos el trim a la cadena
                 String texto_asignatura = linea.trim();
+                
+
+                
                 //Si el texto es igual a la cadena vacía lo obviamos
                 if (!"".equals(texto_asignatura)) {
+                    
+                    
+                //Dividmos la cadena por punto y coma
+                String[] datos = texto_asignatura.split(";");
+                    
                     Asignatura asignatura = new Asignatura();
-                    asignatura.ID = texto_asignatura;
-                    //y la añadimos a la lista
+                    asignatura.ID = datos[0];
+                    asignatura.texto = datos[1];
+                    asignatura.cuatrimestre = Integer.parseInt(datos[2]);
+                    
+                    //y la añadimos a la lista si es del cuatrimestre indicado
 
+                    if(cuatrimestre == 0){
                     da.add(asignatura);
+                    }else{
+                        if( cuatrimestre == asignatura.cuatrimestre){
+                            da.add(asignatura);
+                        }
+                    }
                 }
 
 
@@ -268,11 +285,18 @@ public class Cargador {
                 String texto_asignatura = linea.trim();
                 //Si el texto es igual a la cadena vacía lo obviamos
                 if (!"".equals(texto_asignatura)) {
-                    Asignatura asignatura = new Asignatura();
-                    asignatura.ID = texto_asignatura;
-                    //y la añadimos a la lista
+                    
+                    //Dividimos el texto según los carácteres punto y coma
+                    String[] datos = texto_asignatura.split(";");
+                    
+                    Asignatura asignatura = Asignatura.existentes.get(datos[0].trim());
+                    
+                    //Si la asignatura existe la rellenamos, sino nada
+                    if(asignatura != null){
+                        asignatura.texto = datos[1].trim();
+                        asignatura.cuatrimestre = Integer.parseInt(datos[2].trim());
+                    }
 
-                    //da.add(asignatura);
                 }
 
 

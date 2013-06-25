@@ -197,6 +197,7 @@ class Sol {
         
         double puntos = 0;
         int colisiones = 0;
+        int bajo_media = 0;
         boolean valido = true;
 
         int nasig = mejor.solucion.size();
@@ -218,9 +219,13 @@ class Sol {
                 tiempo_estudio = Math.abs(t2-t1);
                 
                 //Comprobamos la diferencia entre el tiempo de estudio real y el deseado
-                float difftestudio = tdeseado - tiempo_estudio;
+                float difftestudio = tiempo_estudio - tdeseado;
                 float absdiff = Math.abs(difftestudio);
                 
+                //TODO Criterios que debería seguir 
+                //Primero que no haya colisiones
+                //Segundo que haya la menor gente posible por debajo de la media
+                //Tercero que la mayor gente posible tenga el mayor tiempo posible
                 
                 if (a1 != null && a2 != null) {
                     //Si hay afectados entonces sumamos algo, sino nada
@@ -229,12 +234,13 @@ class Sol {
                         //Tenemos que intentar reducir la diferencia entre los tiempos así que lo restaremos
                         if (tiempo_estudio > 0) { // > 0
                             //Si estamos por debajo de la media penalizamos más que si estamos por encima
-                            if(difftestudio < 0){
+                            if(tiempo_estudio < tdeseado){
                             //Cuanto más abajo más penalizamos
                             //usaremos una función exponencial que comienza en el infinito para x=0 hasta 0 para x=tdeseado
-                                puntos -= (Math.pow(2, tdeseado/tiempo_estudio)-2) * nafectados;
+                                //puntos -= (Math.pow(2, tdeseado/tiempo_estudio)-2) * nafectados;
+                                puntos -= Math.pow(2, absdiff) * nafectados;
                             }else if (difftestudio > 0){
-                                puntos -= Math.log(absdiff) * nafectados;
+                                //puntos -= Math.log(absdiff) * nafectados;
                             }
                                 
                         }
@@ -246,6 +252,11 @@ class Sol {
                         if(tiempo_estudio == 0){ // == 0
                             colisiones+=nafectados;
                         }
+                        
+                        if(tiempo_estudio < tdeseado){
+                            //bajo_media += nafectados;
+                        }
+                        
                     }
                 }
             }
@@ -258,6 +269,95 @@ class Sol {
         
         //Rellenamos la evaluación
         eval.puntos= puntos;
+        eval.bajo_minimos = bajo_media;
+        eval.colisiones = colisiones;
+        
+        return eval;
+    }
+    
+    
+    //En esta función damos mayor puntuación al que más se aproxima al tiempo de estudio deseado
+    static Evaluacion evaluarComp(Sol mejor, HashMap<ParAsig, Integer> afectados, int[] huecos, DatosDelProblema dp) {
+        
+        Evaluacion eval = new Evaluacion();
+        
+        double puntos = 0;
+        int colisiones = 0;
+        int bajo_minimos = 0;
+        boolean valido = true;
+        float tdeseado = dp.tdeseado;
+        float tmin = dp.tmin;
+
+        int nasig = mejor.solucion.size();
+
+        for (int a = 0; valido && a < nasig; a++) {
+            int tiempo_estudio = 0;
+            for (int b = a + 1; valido && b < nasig; b++) {
+                
+                //Si los dos espacios tienen asignatura
+                Asignatura a1 = mejor.solucion.get(a).asignatura;
+                Asignatura a2 = mejor.solucion.get(b).asignatura;
+                
+                //Calculamos el tiempo de estudio
+                int hueco1 = mejor.solucion.get(a).numero;
+                int hueco2 = mejor.solucion.get(b).numero;
+                int t1 = huecos[hueco1];
+                int t2 = huecos[hueco2];
+                
+                tiempo_estudio = Math.abs(t2-t1);
+                
+                //Comprobamos la diferencia entre el tiempo de estudio real y el deseado
+                float difftestudio = tiempo_estudio - tdeseado;
+                float absdiff = Math.abs(difftestudio);
+                
+                //TODO Criterios que debería seguir 
+                //Primero que no haya colisiones
+                //Segundo que haya la menor gente posible por debajo de la media
+                //Tercero que la mayor gente posible tenga el mayor tiempo posible
+                
+                if (a1 != null && a2 != null) {
+                    //Si hay afectados entonces sumamos algo, sino nada
+                    Integer nafectados = afectados.get(new ParAsig(a1, a2));
+                    if (nafectados != null) {
+                        //Tenemos que intentar reducir la diferencia entre los tiempos así que lo restaremos
+                        if (tiempo_estudio > 0) { // > 0
+                            //Si estamos por debajo de la media penalizamos más que si estamos por encima
+                            if(tiempo_estudio < tdeseado){
+                            //Cuanto más abajo más penalizamos
+                            //usaremos una función exponencial que comienza en el infinito para x=0 hasta 0 para x=tdeseado
+                                //puntos -= (Math.pow(2, tdeseado/tiempo_estudio)-2) * nafectados;
+                                puntos -= Math.pow(2, absdiff) * nafectados;
+                            }else if (difftestudio > 0){
+                                //puntos -= Math.log(absdiff) * nafectados;
+                            }
+                                
+                        }
+
+                        //No se permiten tiempos iguales a 0
+                        /*if(tiempo_estudio==0){
+                         valido = false;
+                         }*/
+                        if(tiempo_estudio == 0){ // == 0
+                            colisiones+=nafectados;
+                        }
+                        
+                        if(tiempo_estudio < tmin){
+                            bajo_minimos += nafectados;
+                        }
+                        
+                    }
+                }
+            }
+        }
+
+        //Si no es válido entonces evaluación = 0;
+        if (!valido) {
+            puntos = 0;
+        }
+        
+        //Rellenamos la evaluación
+        eval.puntos= puntos;
+        eval.bajo_minimos = bajo_minimos;
         eval.colisiones = colisiones;
         
         return eval;

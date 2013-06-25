@@ -15,10 +15,12 @@ class Asignatura {
     public static HashMap<String, Asignatura> existentes = new HashMap<String, Asignatura>();
     
     String ID;
+    String texto;
+    int cuatrimestre;
     
     @Override
     public String toString(){
-        return ID;
+        return "(" + ID + ") " + texto; 
     }
     
     

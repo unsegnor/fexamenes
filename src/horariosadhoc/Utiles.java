@@ -355,9 +355,9 @@ public class Utiles {
         return mejor;
     }
 
-    static Sol ALprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos, float tdeseado) {
+    static Sol ALprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos, DatosDelProblema dp) {
         Sol mejor = s.copia();
-        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos, tdeseado);
+        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos, dp);
         boolean parar = false;
 
         while (!parar) {
@@ -378,7 +378,7 @@ public class Utiles {
                     //Si es mejor que la mejor pasa a ser la mejor y repetimos
 
                     //Evaluar
-                    Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos, tdeseado);
+                    Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos, dp);
                     //Si la evaluación es mejor pasa a ser la mejor solución
                     if (eval.es_mejor_que(mejor_eval)) {
                         mejor_eval = eval;
@@ -449,9 +449,9 @@ public class Utiles {
         return mejor;
     }
 
-    static Sol BLprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos, float tdeseado) {
+    static Sol BLprimerMejor(Sol s, HashMap<ParAsig, Integer> afectados, int[] huecos, DatosDelProblema dp) {
         Sol mejor = s.copia();
-        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos, tdeseado);
+        Evaluacion mejor_eval = Sol.evaluarComp(mejor, afectados, huecos, dp);
         boolean parar = false;
 
         while (!parar) {
@@ -474,7 +474,7 @@ public class Utiles {
                         //Si es mejor que la mejor pasa a ser la mejor y repetimos
 
                         //Evaluar
-                        Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos, tdeseado);
+                        Evaluacion eval = Sol.evaluarComp(vecino, afectados, huecos, dp);
                         //Si la evaluación es mejor pasa a ser la mejor solución
                         if (eval.es_mejor_que(mejor_eval)) {
                             mejor_eval = eval;
