@@ -18,10 +18,15 @@ class Asignatura {
     String texto;
     int cuatrimestre;
     
+    public int matriculados = 0;
+    
     @Override
     public String toString(){
         return "(" + ID + ") " + texto; 
     }
     
+    public void addMatriculado(){
+        matriculados++;
+    }
     
 }

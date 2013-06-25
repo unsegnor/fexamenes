@@ -36,18 +36,18 @@ public class HorariosAdHoc {
         String archivo_codigos = "RelacionAsignaturasGrados.csv";
         String archivo_asignaturas_validas = "RelacionAsignaturasTodas.csv";
 
-        int dia_i = 1; //13/5/2013
-        int mes_i = 8;
+        int dia_i = 27; //13/5/2013
+        int mes_i = 0;
         int anio_i = 2014;
 
-        int dia_f = 19; //11/6/2013
-        int mes_f = 8;
+        int dia_f = 14; //11/6/2013
+        int mes_f = 1;
         int anio_f = 2014;
 
         //Obtener datos
 
         //Lista de asignaturas a tener en cuenta
-        ArrayList<Asignatura> asignaturas_validas = Cargador.leer_asignaturas(archivo_asignaturas_validas, 0);
+        ArrayList<Asignatura> asignaturas_validas = Cargador.leer_asignaturas(archivo_asignaturas_validas, 1);
 
         for (Asignatura a : asignaturas_validas) {
             System.out.println(a + " cuatrimestre: " + a.cuatrimestre);

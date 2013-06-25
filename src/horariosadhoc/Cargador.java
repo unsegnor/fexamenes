@@ -125,27 +125,27 @@ public class Cargador {
                 //Cada línea es una asignatura
                 //Hacemos el trim a la cadena
                 String texto_asignatura = linea.trim();
-                
 
-                
+
+
                 //Si el texto es igual a la cadena vacía lo obviamos
                 if (!"".equals(texto_asignatura)) {
-                    
-                    
-                //Dividmos la cadena por punto y coma
-                String[] datos = texto_asignatura.split(";");
-                    
+
+
+                    //Dividmos la cadena por punto y coma
+                    String[] datos = texto_asignatura.split(";");
+
                     Asignatura asignatura = new Asignatura();
                     asignatura.ID = datos[0];
                     asignatura.texto = datos[1];
                     asignatura.cuatrimestre = Integer.parseInt(datos[2]);
-                    
+
                     //y la añadimos a la lista si es del cuatrimestre indicado
 
-                    if(cuatrimestre == 0){
-                    da.add(asignatura);
-                    }else{
-                        if( cuatrimestre == asignatura.cuatrimestre){
+                    if (cuatrimestre == 0) {
+                        da.add(asignatura);
+                    } else {
+                        if (cuatrimestre == asignatura.cuatrimestre) {
                             da.add(asignatura);
                         }
                     }
@@ -224,7 +224,11 @@ public class Cargador {
                         if (asignatura != null) {
                             //Añadimos la asognatura a la lista para la matriculación
                             asignaturas.add(asignatura);
+
+                            //Añadimos un matriculado
+                            asignatura.addMatriculado();
                         }
+
 
 
                     }
@@ -285,14 +289,14 @@ public class Cargador {
                 String texto_asignatura = linea.trim();
                 //Si el texto es igual a la cadena vacía lo obviamos
                 if (!"".equals(texto_asignatura)) {
-                    
+
                     //Dividimos el texto según los carácteres punto y coma
                     String[] datos = texto_asignatura.split(";");
-                    
+
                     Asignatura asignatura = Asignatura.existentes.get(datos[0].trim());
-                    
+
                     //Si la asignatura existe la rellenamos, sino nada
-                    if(asignatura != null){
+                    if (asignatura != null) {
                         asignatura.texto = datos[1].trim();
                         asignatura.cuatrimestre = Integer.parseInt(datos[2].trim());
                     }

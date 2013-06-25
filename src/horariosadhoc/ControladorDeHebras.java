@@ -91,7 +91,7 @@ public class ControladorDeHebras {
                     System.out.println(fecha.get(Calendar.DAY_OF_MONTH) +"/"+ (fecha.get(Calendar.MONTH)+1) +"/"+ fecha.get(Calendar.YEAR) +" - "+ fecha.get(Calendar.HOUR_OF_DAY) +":"+ fecha.get(Calendar.MINUTE));
                     System.out.println("---------------------------------------------");
                 }
-                System.out.println(a.asignatura);
+                System.out.println(a.asignatura + "\t(" + a.asignatura.matriculados + " estudiantes)");
             }
             //System.out.println(asignaciones);
             
