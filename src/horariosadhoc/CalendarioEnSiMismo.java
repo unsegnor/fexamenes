@@ -26,7 +26,7 @@ public class CalendarioEnSiMismo {
          *  - Por cada línea una asignación con el formato: día;mes;año;hora;minuto;asignatura;
          */
         
-        
+        //COMPROBANDO CREACIÓN DE RAMA LIMPIEZA
         
         return sb.toString();        
     }
