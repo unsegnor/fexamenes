@@ -5,7 +5,10 @@
 package horariosadhoc;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -21,6 +24,10 @@ public class ControladorDeHebras {
     public int contador = 0;
     public int max_ejecuciones = 0;
     private final ExecutorService exec;
+    int[] tiempos;
+    Calendar fini;
+    int[] huecos;
+    HashMap<ParAsig, Integer> afectados;
     
     
     ControladorDeHebras(ExecutorService exec){
@@ -28,7 +35,7 @@ public class ControladorDeHebras {
     }
 
     synchronized public void heTerminado(Evaluacion eval, Sol solucion) {
-        System.out.println("Una hebra ha terminado con " + eval.colisiones + "," + eval.puntos + "," + solucion);
+        System.out.println("Una hebra ha terminado con " + eval.colisiones + " colisiones, "+ eval.bajo_minimos + " estudiantes bajo el tiempo mínimo, " + eval.puntos + " puntos, " + solucion);
         //Sumamos una ejecución más
         contador++;
 
@@ -65,16 +72,50 @@ public class ControladorDeHebras {
             Collections.sort(asignaciones, new ComparadorDeAsignaciones());
             //Pasar a calendario
             //Imprimir guay
+            
+            Calendar fecha = this.fini;
+            
             int actual = 0;
-            System.out.println("-------------------"+actual+"--------------------------");
+            System.out.println("Exámenes de incidencia previstos: " + mejor_colisiones);
+            System.out.println("Puntuación del calendario: " + mejor_puntuacion);
+            System.out.println("---------------------------------------------");
+            System.out.println(fecha.get(Calendar.DAY_OF_MONTH) +"/"+ (fecha.get(Calendar.MONTH)+1) +"/"+ fecha.get(Calendar.YEAR) +" - "+ fecha.get(Calendar.HOUR_OF_DAY) +":"+ fecha.get(Calendar.MINUTE));
+            System.out.println("---------------------------------------------");
             for(Asignacion a: asignaciones){
                 if(a.numero > actual){
-                    actual = a.numero;
-                    System.out.println("-------------------"+actual+"--------------------------");
+                    while(actual<a.numero){
+                    fecha.add(Calendar.HOUR, tiempos[actual]);
+                    actual++;
+                    }
+                    System.out.println("---------------------------------------------");
+                    System.out.println(fecha.get(Calendar.DAY_OF_MONTH) +"/"+ (fecha.get(Calendar.MONTH)+1) +"/"+ fecha.get(Calendar.YEAR) +" - "+ fecha.get(Calendar.HOUR_OF_DAY) +":"+ fecha.get(Calendar.MINUTE));
+                    System.out.println("---------------------------------------------");
                 }
-                System.out.println(a.asignatura);
+                System.out.println(a.asignatura + "\t(" + a.asignatura.matriculados + " estudiantes)");
             }
             //System.out.println(asignaciones);
+            
+            //Calcular histograma de la solución
+            HashMap<Integer, Integer> histograma = Sol.calcularHistograma(mejor_solucion, afectados, huecos);
+            
+            Evaluacion evalu = Sol.evaluarComp(mejor_solucion, afectados, huecos);
+            
+            //Vector en el que lo vamos a almacenar
+            ArrayList<Posicion<Integer> > vhistograma = new ArrayList<Posicion<Integer> >();
+            
+            //Pasar histograma a vector
+            for(Entry<Integer,Integer> e : histograma.entrySet()){
+                Posicion<Integer> p = new Posicion<Integer>(e.getValue(), e.getKey());
+                vhistograma.add(p);
+            }
+            
+            //Ordenar vector
+            Collections.sort(vhistograma, new OrdenarPosiciones());
+            
+            //Imprimir histograma
+            for(Posicion p : vhistograma){
+                System.out.println(p.valor + "," + (Integer)p.cosa);
+            }
         }
 
     }
